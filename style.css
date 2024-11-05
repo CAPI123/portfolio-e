@@ -21,6 +21,10 @@ body[data-theme="light_theme"] {
   --icon-color: #333;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   font-family: "Poppins", sans-serif;
   background: var(--bg-color);
