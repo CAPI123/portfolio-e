@@ -1,32 +1,10 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Redressed&display=swap");
 
-/* Dark theme colors */
-.skil {
-  width: 60%;
-  margin: 20%;
-  border-left: #000;
-  border-width: 10px;
-  margin-top: 0%;
-}
-p {
-  justify-content: center;
-}
-/* Primary theme colors */
-body[data-theme="light_theme"] {
-  --white: #fff;
-  --bg-color: #f8f8f8;
-  --color: #333;
-  --secondary-color: #ff7f57;
-  --icon-bg-color: #333;
-  --icon-color: #333;
-}
-
 html {
   scroll-behavior: smooth;
 }
 
 body {
-  font-family: "Poppins", sans-serif;
   background: var(--bg-color);
   color: var(--color);
   text-align: center;
@@ -34,13 +12,20 @@ body {
   width: 100%;
 }
 
-body[data-theme="dark_theme"] {
+body,
+* {
+  font-family: "Poppins", sans-serif;
+}
+
+:root {
   --white: #fff;
-  --bg-color: #000;
-  --color: #fff;
+  --bg-color-light: #f8f8f8;
+  --bg-color-dark: #000;
+  --primary-color: #333;
   --secondary-color: #ff7f57;
   --icon-bg-color: #333;
-  --icon-color: #fff;
+  --icon-color-light: #333;
+  --icon-color-dark: #fff;
 }
 
 @keyframes fadeIn {
@@ -112,16 +97,14 @@ body[data-theme="dark_theme"] {
 }
 
 .wrapper {
-  position: absolute;
-
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  -webkit-transform: translate(-50%, -50%);
-  animation: fadeIn 1000ms ease;
-  -webkit-animation: fadeIn 1000ms ease;
-  width: 100%;
-  height: 100%;
+  position: relative;
+  width: 80%;
+  max-width: 1200px;
+  margin: 80px auto 0;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 .wrapper.button {
   display: inline-block;
@@ -166,6 +149,10 @@ h1 {
   display: inline-block;
 }
 
+p {
+  justify-content: center;
+}
+
 .dot {
   color: var(--secondary-color);
 }
@@ -173,7 +160,6 @@ h1 {
 p {
   text-align: center;
   margin: 18px;
-  font-family: "Muli", sans-serif;
   font-weight: normal;
 }
 
@@ -219,20 +205,16 @@ p {
   justify-content: center;
   align-items: center;
   background-color: rgb(15, 15, 15);
-  transition: opacity 9.75s, visibility 10.75s;
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.75s ease, visibility 0.75s ease;
+  z-index: 10000;
 }
 .loader-hidden {
   opacity: 0;
   visibility: hidden;
 }
 
-/*@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@200&display=swap');
-
-*,*::before,*::after{
-    box-sizing:border-box;
-    font-family:'Montserrat',sans-serif;
-    font-weight:400;
-}*/
 .row {
   display: flex;
 }
@@ -246,21 +228,11 @@ p {
   padding: 2em 0;
 }
 .card {
-  align-items: flex-end;
-  justify-content: center;
-  position: relative;
   max-width: 90px;
   max-height: 90px;
-  text-align: center;
-  overflow: hidden;
-  background-image: url(about.jpg);
-  background-position: center;
-  background-repeat: no-repeat;
   background-size: cover;
-  border-radius: 25px;
+  background-position: center;
   transition: max-width 0.5s ease-in-out;
-  -webkit-border-radius: 25px;
-  margin-left: 2cm;
 }
 .card:nth-of-type(2) {
   background-image: url(resume.jpg);
@@ -285,6 +257,12 @@ p {
 .card:hover.title {
   all: unset;
 }
+h2,
+h3,
+h4 {
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+}
 h2 {
   font-size: 40px;
   color: rgb(0, 0, 0);
@@ -297,22 +275,88 @@ h2 {
 }
 p {
   font-size: 18px;
-} /*
-.card:hover p{
-    position: relative;
-    opacity: 1;
-    max-height: 100%;
-    transition-delay:0.3s ;
-}*/
+}
+
+.card:hover {
+  position: relative;
+  opacity: 1;
+  max-height: 300px;
+  transition-delay: 0.3s;
+}
 .container1 {
   display: grid;
   grid-template-columns: 30% auto;
 }
 
+/* Assuming the navbar max-width is set to 1200px */
+.skills-experience-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* Two equal columns */
+  gap: 20px; /* Space between the cards */
+  max-width: 1200px; /* Align with navbar width */
+  margin: 0 auto; /* Center align the section */
+  padding: 20px; /* Padding to align with navbar if it has padding */
+}
+
+.card5 {
+  background-color: #f9f9f9; /* Light background color */
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
+}
+
+.card5 h2 {
+  font-size: 24px;
+  margin-bottom: 16px;
+}
+
+.card5 ul {
+  list-style: none;
+  padding: 0;
+}
+
+.card5 li {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.card5 li i {
+  margin-right: 8px;
+  color: #007acc; /* Icon color */
+}
+
+.experience-item h4 {
+  display: flex;
+  align-items: center;
+  font-size: 18px;
+  margin-bottom: 8px;
+}
+
+.experience-item h4 i {
+  margin-right: 8px;
+  color: #007acc; /* Icon color */
+}
+
+.icon {
+  font-size: 16px;
+}
+
+/* Add specific icon styles if using a library */
+.icon-data::before {
+  content: "\f1c0"; /* Icon code here */
+}
+.icon-visualization::before {
+  content: "\f201"; /* Icon code here */
+}
+/* Add other icon selectors as needed */
+
 .container2 {
   display: grid;
-  grid-template-columns: 30% 60%;
-  margin-left: 2cm;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  width: 100%;
+  margin-top: 20px;
 }
 #container3 {
   display: grid;
@@ -364,7 +408,7 @@ p {
   color: #ffffff;
 }
 .column {
-  margin-top: 1.7cm;
+  padding: 20px;
 }
 .button {
   background-color: #4d4c4c;
@@ -620,13 +664,19 @@ input[type="submit"]:hover {
   }
   .container2 {
     display: inline-block;
-    grid-template-columns: 100% auto;
+    grid-template-columns: 1fr;
     margin-left: 0;
     margin-top: 1%;
     width: 100%;
   }
   .column {
     margin-top: 2.7cm;
+  }
+
+  .column2 .slider {
+    width: 100%;
+    height: 300px;
+    background-color: lightgrey;
   }
 
   #container3 {
