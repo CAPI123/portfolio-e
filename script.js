@@ -1,9 +1,19 @@
 // Download CV function
 function downloadCV() {
-  const fileUrl = "EMMANUEL OUKO OWUOR CV.pdf";
+  const fileUrl = "./assets/EMMANUEL OUKO OWUOR CV.pdf";
   const link = document.createElement("a");
   link.href = fileUrl;
-  link.download = "Emmanuel_Ouko_CV.pdf"; // Specify the download filename
+  link.download = "EMMANUEL OUKO OWUOR CV.pdf"; // Specify the download filename
+
+  // Add error handling for file access
+  link.onerror = () => {
+    console.error("Error downloading CV");
+    alert(
+      "Sorry, there was an error downloading the CV. Please try again later."
+    );
+  };
+
+  // Temporarily append link to body, trigger click, then remove
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
@@ -17,12 +27,24 @@ function updateFooterYear() {
   }
 }
 
-// Initialize when DOM is loaded
+// Initialize event listeners when DOM is loaded
 document.addEventListener("DOMContentLoaded", () => {
+  // Get the resume button
+  const resumeButton = document.querySelector('.cta-buttons a[href="#"].btn');
+
+  if (resumeButton) {
+    // Remove the placeholder href
+    resumeButton.removeAttribute("href");
+
+    // Add click event listener
+    resumeButton.addEventListener("click", downloadCV);
+  }
+
+  // Keep the existing year update functionality
   updateFooterYear();
 });
 
-//Typing Animation
+/* //Typing Animation
 // First, update your HTML to have a span for the typing effect
 const text = document.querySelector(".intro-text h2");
 const originalText = text.textContent;
@@ -77,4 +99,4 @@ const observer = new IntersectionObserver(
 
 // Start observing the hero section
 const heroSection = document.querySelector(".hero");
-observer.observe(heroSection);
+observer.observe(heroSection); */
