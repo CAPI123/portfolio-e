@@ -1,4 +1,21 @@
-// Download function for CV and Certificates
+// Consolidate the showAlert functions into one
+function showAlert(alertElement) {
+  // Get all alerts
+  const alerts = document.querySelectorAll(".alert");
+  // Hide all alerts first
+  alerts.forEach((alert) => alert.classList.remove("show"));
+
+  // Show the new alert
+  if (alertElement) {
+    alertElement.classList.add("show");
+    // Hide after 5 seconds
+    setTimeout(() => {
+      alertElement.classList.remove("show");
+    }, 5000);
+  }
+}
+
+// Modify the downloadFile function to properly handle alerts
 function downloadFile(fileType) {
   const successAlert = document.querySelector(
     ".download-alerts .alert-success"
@@ -11,52 +28,36 @@ function downloadFile(fileType) {
       filename: "EMMANUEL OUKO OWUOR CV.pdf",
     },
     cert: {
-      url: "./assets/EMMANUEL OUKO OWUOR CERTS.pdf", // Update this path to your certs file
+      url: "./assets/EMMANUEL OUKO OWUOR CERTS.pdf",
       filename: "EMMANUEL OUKO OWUOR CERTS.pdf",
     },
   };
 
   const fileInfo = files[fileType];
   if (!fileInfo) {
+    showAlert(errorAlert);
     console.error("Invalid file type requested");
     return;
   }
 
-  const link = document.createElement("a");
-  link.href = fileInfo.url;
-  link.download = fileInfo.filename;
-
-  // Add error handling for file access
-  link.onerror = () => {
-    showAlert(errorAlert);
-    console.error(`Error downloading ${fileType}`);
-  };
-
-  // Temporarily append link to body, trigger click, then remove
-  try {
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    showAlert(successAlert);
-  } catch (error) {
-    showAlert(errorAlert);
-    console.error("Download error:", error);
-  }
-}
-
-// Function to show alert
-function showAlert(alertElement) {
-  // Hide any existing alerts
-  const alerts = document.querySelectorAll(".alert");
-  alerts.forEach((alert) => alert.classList.remove("show"));
-
-  // Show the new alert
-  alertElement.classList.add("show");
-
-  // Hide alert after 3 seconds
-  setTimeout(() => {
-    alertElement.classList.remove("show");
-  }, 5000);
+  fetch(fileInfo.url)
+    .then((response) => {
+      if (!response.ok) throw new Error("File not found");
+      return response.blob();
+    })
+    .then((blob) => {
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = fileInfo.filename;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      showAlert(successAlert);
+    })
+    .catch((error) => {
+      console.error("Download error:", error);
+      showAlert(errorAlert);
+    });
 }
 
 // Initialize event listeners when DOM is loaded
@@ -120,46 +121,66 @@ document.addEventListener("click", (e) => {
   }
 });
 
-// Initialize EmailJS
-// Replace with your actual public key
-emailjs.init("YOUR_PUBLIC_KEY");
+// Initialize EmailJS when the DOM is loaded
+document.addEventListener("DOMContentLoaded", () => {
+  // Initialize EmailJS with your public key
+  emailjs.init("A4FuOK1yQ3QXUp2b6");
 
-const contactForm = document.querySelector(".contact-form");
-const successAlert = document.querySelector(".alert-success");
-const errorAlert = document.querySelector(".alert-error");
+  const form = document.querySelector(".contact-form");
+  const submitBtn = form.querySelector('button[type="submit"]');
 
-contactForm.addEventListener("submit", async (e) => {
-  e.preventDefault();
+  async function sendEmail(e) {
+    e.preventDefault();
 
-  try {
-    // Replace these with your actual EmailJS service ID and template ID
-    const response = await emailjs.sendForm(
-      "YOUR_SERVICE_ID",
-      "YOUR_TEMPLATE_ID",
-      contactForm
-    );
+    // Get alerts
+    const successAlert = document.querySelector(".form-alerts .alert-success");
+    const errorAlert = document.querySelector(".form-alerts .alert-error");
 
-    if (response.status === 200) {
-      showAlert(successAlert);
-      contactForm.reset();
-    } else {
+    // Show loading state
+    submitBtn.textContent = "Sending...";
+    submitBtn.disabled = true;
+
+    try {
+      const result = await emailjs.sendForm(
+        "service_826nk3r", // Your EmailJS service ID
+        "template_xbqe2t", // Your EmailJS template ID
+        form
+      );
+
+      if (result.status === 200) {
+        showAlert(successAlert);
+        form.reset();
+      } else {
+        throw new Error("Failed to send message");
+      }
+    } catch (error) {
+      console.error("EmailJS Error:", error);
       showAlert(errorAlert);
+    } finally {
+      // Reset button state
+      submitBtn.textContent = "Send Message";
+      submitBtn.disabled = false;
     }
-  } catch (error) {
-    console.error("Error:", error);
-    showAlert(errorAlert);
+  }
+
+  // Add form submit event listener
+  if (form) {
+    form.addEventListener("submit", sendEmail);
   }
 });
 
+// Alert handling function
 function showAlert(alertElement) {
-  // Hide any existing alerts
-  successAlert.classList.remove("show");
-  errorAlert.classList.remove("show");
+  if (!alertElement) return;
 
-  // Show the new alert
+  // Hide all existing alerts first
+  const alerts = document.querySelectorAll(".alert");
+  alerts.forEach((alert) => alert.classList.remove("show"));
+
+  // Show new alert
   alertElement.classList.add("show");
 
-  // Hide alert after 5 seconds
+  // Hide after 5 seconds
   setTimeout(() => {
     alertElement.classList.remove("show");
   }, 5000);
