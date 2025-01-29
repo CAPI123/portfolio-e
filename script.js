@@ -143,7 +143,7 @@ document.addEventListener("DOMContentLoaded", () => {
     try {
       const result = await emailjs.sendForm(
         "service_826nk3r", // Your EmailJS service ID
-        "template_xbqe2t", // Your EmailJS template ID
+        "template_xbqe2tj", // Your EmailJS template ID
         form
       );
 
