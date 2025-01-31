@@ -29,7 +29,7 @@ function downloadFile(fileType) {
     },
     cert: {
       url: "./assets/EMMANUEL OUKO OWUOR CERTS.pdf",
-      filename: "EMMANUEL OUKO OWUOR CERTS.pdf",
+      filename: "Emmanuel Ouko certificate.pdf",
     },
   };
 
