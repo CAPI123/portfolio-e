@@ -21,26 +21,41 @@ function downloadFile(fileType) {
   const errorAlert = document.querySelector('.download-alerts .alert-error');
 
   const files = {
-    cv: 'public/assets/emmanueloukocv.pdf',
-    cert: 'public/assets/emmanueloukocert.pdf',
+    cv: {
+      url: './assets/emmanueloukocv.pdf',
+      filename: 'EMMANUEL OUKO OWUOR CV.pdf',
+    },
+    cert: {
+      url: './assets/emmanueloukocert.pdf',
+      filename: 'EMMANUEL OUKO OWUOR CERTS.pdf',
+    },
   };
 
-  const fileUrl = files[fileType];
-  if (!fileUrl) {
+  const fileInfo = files[fileType];
+  if (!fileInfo) {
     showAlert(errorAlert);
     console.error('Invalid file type requested');
     return;
   }
 
-  // Directly create an anchor link and trigger download
-  const link = document.createElement('a');
-  link.href = fileUrl;
-  link.download = fileUrl.split('/').pop(); // Extract filename
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-
-  showAlert(successAlert);
+  fetch(fileInfo.url)
+    .then((response) => {
+      if (!response.ok) throw new Error('File not found');
+      return response.blob();
+    })
+    .then((blob) => {
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = fileInfo.filename;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      showAlert(successAlert);
+    })
+    .catch((error) => {
+      console.error('Download error:', error);
+      showAlert(errorAlert);
+    });
 }
 
 // Initialize event listeners when DOM is loaded
